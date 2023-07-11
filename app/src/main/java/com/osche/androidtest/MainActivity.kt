@@ -24,49 +24,209 @@ import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.marginLeft
+import org.json.JSONException
+import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
+    val rawData = """
+         {
+            "apps": [
+                {
+                    "image": "i1",
+                    "title": "App1",
+                    "description": "Descripción 1",
+                    "developer": "Desarrollador 1",
+                    "rating": 5,
+                    "price": 0,
+                    "category": 1,
+                    "installed": true,
+                    "screen": "s1",
+                    "comments": [
+                        {
+                            "user": "User 1",
+                            "comment": "Commentario 1"
+                        }
+                    ]
+                },
+                {
+                    "image": "i2",
+                    "title": "App2",
+                    "description": "Descripción 2",
+                    "developer": "Desarrollador 2",
+                    "rating": 2.5,
+                    "price": 0,
+                    "category": 2,
+                    "installed": false,
+                    "screen": "s2",
+                    "comments": [
+                        {
+                            "user": "User 1",
+                            "comment": "Commentario 1"
+                        },
+                        {
+                            "user": "User 2",
+                            "comment": "Commentario 2"
+                        }
+                    ]
+                },
+                {
+                    "image": "i3",
+                    "title": "App3",
+                    "description": "Descripción 3",
+                    "developer": "Desarrollador 3",
+                    "rating": 3,
+                    "price": 0,
+                    "category": 3,
+                    "installed": true,
+                    "screen": "s3",
+                    "comments": [
+                        {
+                            "user": "User 1",
+                            "comment": "Commentario 1"
+                        },
+                        {
+                            "user": "User 2",
+                            "comment": "Commentario 2"
+                        },
+                        {
+                            "user": "User 3",
+                            "comment": "Commentario 3"
+                        }
+                    ]
+                },
+                {
+                    "image": "i4",
+                    "title": "App4",
+                    "description": "Descripción 4",
+                    "developer": "Desarrollador 4",
+                    "rating": 1,
+                    "price": 2.5,
+                    "category": 1,
+                    "installed": false,
+                    "screen": "s1",
+                    "comments": [
+                        {
+                            "user": "User 1",
+                            "comment": "Commentario 1"
+                        }
+                    ]
+                },
+                {
+                    "image": "i5",
+                    "title": "App5",
+                    "description": "Descripción 5",
+                    "developer": "Desarrollador 5",
+                    "rating": 4.5,
+                    "price": 3.4,
+                    "category": 2,
+                    "installed": true,
+                    "screen": "s2",
+                    "comments": [
+                        {
+                            "user": "User 1",
+                            "comment": "Commentario 1"
+                        },
+                        {
+                            "user": "User 2",
+                            "comment": "Commentario 2"
+                        }
+                    ]
+                },
+                {
+                    "image": "i6",
+                    "title": "App6",
+                    "description": "Descripción 6",
+                    "developer": "Desarrollador 6",
+                    "rating": 2.5,
+                    "price": 1.3,
+                    "category": 3,
+                    "installed": false,
+                    "screen": "s3",
+                    "comments": [
+                        {
+                            "user": "User 1",
+                            "comment": "Commentario 1"
+                        },
+                        {
+                            "user": "User 2",
+                            "comment": "Commentario 2"
+                        },
+                        {
+                            "user": "User 3",
+                            "comment": "Commentario 3"
+                        }
+                    ]
+                },
+                {
+                    "image": "i7",
+                    "title": "App7",
+                    "description": "Descripción 7",
+                    "developer": "Desarrollador 7",
+                    "rating": 3,
+                    "price": 0.3,
+                    "category": 1,
+                    "installed": false,
+                    "screen": "s1",
+                    "comments": [
+                        {
+                            "user": "User 1",
+                            "comment": "Commentario 1"
+                        }
+                    ]
+                },
+                {
+                    "image": "i8",
+                    "title": "App8",
+                    "description": "Descripción 8",
+                    "developer": "Desarrollador 8",
+                    "rating": 0.5,
+                    "price": 5,
+                    "category": 2,
+                    "installed": true,
+                    "screen": "s2",
+                    "comments": [
+                        {
+                            "user": "User 1",
+                            "comment": "Commentario 1"
+                        },
+                        {
+                            "user": "User 2",
+                            "comment": "Commentario 2"
+                        }
+                    ]
+                },
+                {
+                    "image": "i9",
+                    "title": "App9",
+                    "description": "Descripción 9",
+                    "developer": "Desarrollador 9",
+                    "rating": 5,
+                    "price": 0,
+                    "category": 3,
+                    "installed": false,
+                    "screen": "s3",
+                    "comments": [
+                        {
+                            "user": "User 1",
+                            "comment": "Commentario 1"
+                        },
+                        {
+                            "user": "User 2",
+                            "comment": "Commentario 2"
+                        },
+                        {
+                            "user": "User 3",
+                            "comment": "Commentario 3"
+                        }
+                    ]
+                }
+            ]
+        }
+    """.trimIndent()
     val categories = arrayOf("Categoría", "Acción", "Aventura", "Estrategia")
-    val appsList =arrayOf(
-        Game("i1", "App 1", "Descripción 1","Desarrollador 1", 5.0F, 0F,1, true,"s1", arrayOf(
-            Comment("User 1", "Coment 1"),
-        )),
-        Game("i2", "App 2", "Descripción 2","Desarrollador 2", 2.0F, 0F,2, false,"s2", arrayOf(
-            Comment("User 1", "Coment 1"),
-            Comment("User 2", "Coment 2"),
-        )),
-        Game("i3", "App 3", "Descripción 3","Desarrollador 3", 3.5F,0F, 3, false,"s3", arrayOf(
-            Comment("User 1", "Coment 1"),
-            Comment("User 2", "Coment 2"),
-            Comment("User 3", "Coment 3"),
-        )),
-        Game("i4", "App 4", "Descripción 4","Desarrollador 4", 1.0F, 1.6F,1, false,"s1", arrayOf(
-            Comment("User 1", "Coment 1"),
-            Comment("User 2", "Coment 2"),
-        )),
-        Game("i5", "App 5", "Descripción 5","Desarrollador 5", 3.0F, 2.5F,2, false,"s2", arrayOf(
-            Comment("User 1", "Coment 1"),
-            Comment("User 2", "Coment 2"),
-        )),
-        Game("i6", "App 6", "Descripción 6","Desarrollador 6", 2.0F, 1.6F,3, false,"s1", arrayOf(
-            Comment("User 1", "Coment 1"),
-            Comment("User 2", "Coment 2"),
-        )),
-        Game("i7", "App 7", "Descripción 7","Desarrollador 7", 4.5F, 2.5F,1, false,"s2", arrayOf(
-            Comment("User 1", "Coment 1"),
-            Comment("User 2", "Coment 2"),
-        )),
-        Game("i8", "App 8", "Descripción 8","Desarrollador 8", 3.0F, 1.6F,2, false,"s1", arrayOf(
-            Comment("User 1", "Coment 1"),
-            Comment("User 2", "Coment 2"),
-        )),
-        Game("i9", "App 9", "Descripción 9","Desarrollador 9", 2.5F, 2.5F,3, false,"s2", arrayOf(
-            Comment("User 1", "Coment 1"),
-            Comment("User 2", "Coment 2"),
-        )),
-    )
 
+    lateinit var appsList:Array<Game>
     lateinit var spinner:Spinner
     lateinit var tlApps:TableLayout
     lateinit var filteredApps:Array<Game>
@@ -75,6 +235,36 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        appsList = arrayOf()
+        val jsonObject = JSONObject(rawData)
+        val appsJSONArray = jsonObject.optJSONArray("apps")
+        for (i in 0 until appsJSONArray.length()) {
+            val appJSONObject = appsJSONArray.getJSONObject(i)
+            val image = appJSONObject.optString("image")
+            val title = appJSONObject.optString("title")
+            val description = appJSONObject.optString("description")
+            val developer = appJSONObject.optString("developer")
+            val screen = appJSONObject.optString("screen")
+            val rating = appJSONObject.optDouble("rating").toFloat()
+            val price = appJSONObject.optDouble("price").toFloat()
+            val categoryId = appJSONObject.optInt("category")
+            val installed = appJSONObject.optBoolean("installed")
+
+            var comments:Array<Comment> = arrayOf()
+            val commentsJSONArray = appJSONObject.optJSONArray("comments")
+            for (j in 0 until commentsJSONArray.length()) {
+                val commentJSONObject = commentsJSONArray.getJSONObject(j)
+                val user = commentJSONObject.optString("user")
+                val commentString = commentJSONObject.optString("comment")
+
+                val comment = Comment(user, commentString)
+                comments += comment
+            }
+
+            val game = Game(image, title, description, developer, rating, price, categoryId, installed, screen, comments)
+            appsList += game
+        }
 
         findViews()
         listeners()
